@@ -1,0 +1,18 @@
+{
+    "files.exclude": {
+        "**/.dart_tool": true,
+        "**/.idea": true,
+        "**/.vscode": false,
+        "**/.packages": true,
+        "**/build": true,
+        "**/*.iml": true,
+        "**/.flutter-plugins*": true,
+        "**/.metadata": true,
+        "**/*.lock": true,
+        "**/.gradle": true,
+        "**/gradlew*": true,
+        "**/Pods": true,
+        "**/.symlinks": true,
+        "**/.cxx": true,
+    }
+}
