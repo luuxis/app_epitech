@@ -14,5 +14,6 @@
         "**/Pods": true,
         "**/.symlinks": true,
         "**/.cxx": true,
-    }
+    },
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
