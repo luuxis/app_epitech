@@ -1,4 +1,4 @@
-package com.example.meteo
+package fr.luuxis.meteo
 
 import io.flutter.embedding.android.FlutterActivity
 
