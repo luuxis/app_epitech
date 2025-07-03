@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../api/weather_api.dart';
 import '../models/weather_data.dart';
 import '../services/location_service.dart';
+import 'camera_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -49,8 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
-            }
-            else if (snapshot.hasError) {
+            } else if (snapshot.hasError) {
               return Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
@@ -59,16 +59,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   textAlign: TextAlign.center,
                 ),
               );
-            }
-            else if (snapshot.hasData) {
+            } else if (snapshot.hasData) {
               final weather = snapshot.data!;
               return _buildWeatherUI(weather);
-            }
-            else {
+            } else {
               return const Text('Aucune donnée à afficher.');
             }
           },
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const CameraScreen()),
+          );
+        },
+        child: const Icon(Icons.camera_alt),
       ),
     );
   }
