@@ -3,6 +3,9 @@ import '../api/weather_api.dart';
 import '../models/weather_data.dart';
 import '../services/location_service.dart';
 import 'camera_screen.dart';
+import 'dart:async';
+import 'dart:math';
+import 'package:sensors_plus/sensors_plus.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,10 +19,50 @@ class _HomeScreenState extends State<HomeScreen> {
   final WeatherApiService _weatherApiService = WeatherApiService();
   late Future<WeatherData> _weatherDataFuture;
 
+  StreamSubscription? _accelerometerSubscription;
+  String _motionStatus = 'Analyse en cours...';
+
   @override
   void initState() {
     super.initState();
     _weatherDataFuture = _fetchWeatherData();
+    _startListeningToSensor();
+  }
+
+  void _startListeningToSensor() {
+    _accelerometerSubscription = accelerometerEventStream().listen(
+      (AccelerometerEvent event) {
+        double magnitude = sqrt(
+          pow(event.x, 2) + pow(event.y, 2) + pow(event.z, 2),
+        );
+
+        if (magnitude > 10.5 || magnitude < 9.0) {
+          if (_motionStatus != 'En Mouvement') {
+            setState(() {
+              _motionStatus = 'En Mouvement';
+            });
+          }
+        } else {
+          if (_motionStatus != 'Immobile') {
+            setState(() {
+              _motionStatus = 'Immobile';
+            });
+          }
+        }
+      },
+      onError: (e) {
+        setState(() {
+          _motionStatus = 'Capteur indisponible';
+        });
+      },
+      cancelOnError: true,
+    );
+  }
+
+  @override
+  void dispose() {
+    _accelerometerSubscription?.cancel();
+    super.dispose();
   }
 
   Future<WeatherData> _fetchWeatherData() async {
@@ -102,6 +145,26 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(
             weather.description.toUpperCase(),
             style: const TextStyle(fontSize: 20, letterSpacing: 1.2),
+          ),
+          const SizedBox(height: 30),
+
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 132, 132, 132),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.directions_walk, size: 20),
+                const SizedBox(width: 8),
+                Text(
+                  'État : $_motionStatus',
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 30),
           Row(
