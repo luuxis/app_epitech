@@ -1,6 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'preview_screen.dart';
+import 'save_entry_screen.dart';
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({super.key});
@@ -50,7 +50,7 @@ class _CameraScreenState extends State<CameraScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => PreviewScreen(imagePath: image.path),
+          builder: (context) => SaveEntryScreen(imagePath: image.path),
         ),
       );
     } catch (e) {

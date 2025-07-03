@@ -3,6 +3,7 @@ import '../api/weather_api.dart';
 import '../models/weather_data.dart';
 import '../services/location_service.dart';
 import 'camera_screen.dart';
+import 'history_screen.dart';
 import 'dart:async';
 import 'dart:math';
 import 'package:sensors_plus/sensors_plus.dart';
@@ -83,9 +84,17 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Ma Météo Actuelle'),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.history),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HistoryScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body: Center(
         child: FutureBuilder<WeatherData>(
